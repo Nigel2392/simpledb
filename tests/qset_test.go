@@ -94,7 +94,7 @@ func BenchmarkDatabaseFilter(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		b.StartTimer()
-		qs := mDB.FilterWithLimit(&tmodel, filter, int(CREATE_LIMIT/4))
+		qs := mDB.FilterWithLimit(&tmodel, filter, int(CREATE_LIMIT/4), nil)
 		_ = qs
 	}
 }

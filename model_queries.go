@@ -7,13 +7,13 @@ import (
 )
 
 // Filter returns a QuerySet with the given filters applied.
-func (d *Database) Filter(model Model, filter Filters) ModelSet {
-	return d.FilterWithLimit(model, filter, d.LIMIT)
+func (d *Database) Filter(model Model, filter Filters, exclude []string) ModelSet {
+	return d.FilterWithLimit(model, filter, d.LIMIT, exclude)
 }
 
 // See Filter.
 // Also allows you to specify a limit on the number of results returned.
-func (d *Database) FilterWithLimit(model Model, filters Filters, limit int) ModelSet {
+func (d *Database) FilterWithLimit(model Model, filters Filters, limit int, exclude []string) ModelSet {
 	var query string = `SELECT * FROM ` + model.TableName()
 	f_query, values := filters.Query(false)
 	if f_query == "" {
@@ -27,7 +27,7 @@ func (d *Database) FilterWithLimit(model Model, filters Filters, limit int) Mode
 		panic(err)
 		// return nil
 	}
-	return ScanRows(results, model)
+	return ScanRows(results, model, exclude)
 }
 
 // AllQ returns a query that will return all rows in the table.
@@ -70,17 +70,17 @@ func (d *Database) AllModel(model Model, exclude []string) ModelSet {
 	if err != nil {
 		return nil
 	}
-	ms := ScanRows(rows, model)
+	ms := ScanRows(rows, model, exclude)
 	rows.Close()
 	return ms
 }
 
 // Scan rows into models, put those into a ModelSet
-func ScanRows(rows *sql.Rows, model Model) ModelSet {
+func ScanRows(rows *sql.Rows, model Model, exclude []string) ModelSet {
 	var models []Model
 	for rows.Next() {
 		model := NewModel(model)
-		if err := Scan(model, rows); err != nil {
+		if err := Scan(model, rows, exclude); err != nil {
 			panic(err)
 		}
 		models = append(models, model)
@@ -89,9 +89,9 @@ func ScanRows(rows *sql.Rows, model Model) ModelSet {
 }
 
 // Scan a row into a model
-func ScanRow(row *sql.Row, model Model) (Model, error) {
+func ScanRow(row *sql.Row, model Model, exclude []string) (Model, error) {
 	model = NewModel(model)
-	fields, err := modelFields(model)
+	fields, err := modelFields(model, exclude)
 	if err != nil {
 		return nil, errors.New("modelFields: " + err.Error())
 	}

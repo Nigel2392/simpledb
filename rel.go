@@ -37,7 +37,7 @@ func (db *Database) SelectFK(from, to Model) (ModelSet, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	qs := ScanRows(rows, to)
+	qs := ScanRows(rows, to, nil)
 	return qs, nil
 }
 
@@ -48,7 +48,7 @@ func (db *Database) SelectFKReverse(from, to Model) (ModelSet, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	qs := ScanRows(rows, from)
+	qs := ScanRows(rows, from, nil)
 	return qs, nil
 }
 
@@ -71,7 +71,7 @@ func (db *Database) GetOneToOne(from, to Model) (ModelSet, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	qs := ScanRows(rows, from)
+	qs := ScanRows(rows, from, nil)
 	return qs, nil
 }
 
@@ -82,7 +82,7 @@ func (db *Database) GetOneToMany(from, to Model) (ModelSet, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	qs := ScanRows(rows, from)
+	qs := ScanRows(rows, from, nil)
 	return qs, nil
 }
 
