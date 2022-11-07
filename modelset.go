@@ -7,17 +7,27 @@ import (
 	"sync"
 )
 
+// ModelSet is a client-side representation of a queryset.
+// Allows limited filtering.
 type ModelSet []Model
 
+// Len returns the number of models in the ModelSet.
 func (ms ModelSet) Len() int {
 	return len(ms)
 }
 
+// String returns a string representation of the ModelSet.
 func (ms ModelSet) String() string {
 	var str string = "ModelSet: " + strconv.Itoa(ms.Len()) + " models"
 	return str
 }
 
+// Filter a modelset, returns a new modelset.
+// Example:
+//
+//	qs.Filter("name=John,Paul")
+//	qs.Filter("age=18,19,20")
+//
 // Better to use on smaller sets, less than 1000.
 // Otherwise use the Database.Filter() method.
 func (ms ModelSet) Filter(args []string) ModelSet {
@@ -56,6 +66,7 @@ func (ms ModelSet) Filter(args []string) ModelSet {
 	return ms
 }
 
+// Return a slice of slices of values.
 func (ms ModelSet) Values(exclude ...string) []map[string]any {
 	var newvals []map[string]any = []map[string]any{}
 	if ms.Len() <= 0 {

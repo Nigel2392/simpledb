@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// Queryset is a struct that handles generating SQL queries
 type QuerySet struct {
 	Statements []string
 	Filters    Filters
@@ -18,6 +19,7 @@ type QuerySet struct {
 	PAGESIZE   int
 }
 
+// Initialize the QuerySet
 func NewQuerySet(db *Database, model ...Model) *QuerySet {
 	qs := &QuerySet{
 		Statements: []string{},
@@ -32,16 +34,19 @@ func NewQuerySet(db *Database, model ...Model) *QuerySet {
 	return qs
 }
 
+// Add SQL statement to the QuerySet
 func (q *QuerySet) Add(statement string) *QuerySet {
 	q.Statements = append(q.Statements, statement)
 	return q
 }
 
+// Add filters to apply in the where clause at the end of a query
 func (q *QuerySet) AddFiters(filters Filters) *QuerySet {
 	q.Filters = append(q.Filters, filters...)
 	return q
 }
 
+// Generate the SQL query and values to be passed to the database
 func (q *QuerySet) Query() (string, []interface{}) {
 	f_query, values := q.Filters.Query(true)
 	q.Q = strings.Join(q.Statements, " ") + f_query
@@ -53,11 +58,14 @@ func (q *QuerySet) Query() (string, []interface{}) {
 	return q.Q, values
 }
 
+// Clear the QuerySet
 func (q *QuerySet) Clear() *QuerySet {
 	q.Statements = []string{}
+	q.Filters = Filters{}
 	return q
 }
 
+// Get all models from the table
 func (q *QuerySet) All() *QuerySet {
 	q.Add(`SELECT *`)
 	if q.Model != nil {
@@ -66,31 +74,38 @@ func (q *QuerySet) All() *QuerySet {
 	return q
 }
 
+// Count all models in the table
 func (q *QuerySet) Count() *QuerySet {
 	q.Add(`SELECT COUNT(*)`)
 	return q
 }
 
+// Select specific columns from the table
 func (q *QuerySet) Select(columns ...string) *QuerySet {
 	q.Add(fmt.Sprintf(`SELECT %s`, strings.Join(columns, ", ")))
 	return q
 }
 
+// Group by a column
 func (q *QuerySet) GroupBy(columns ...string) *QuerySet {
 	q.Add(fmt.Sprintf(`GROUP BY %s`, strings.Join(columns, ", ")))
 	return q
 }
 
+// Enter raw SQL into the end of the query
+// Returns the sql query, and the values to be passed to the database
 func (q *QuerySet) Raw(sql string) (string, []any) {
 	q.Add(sql)
 	return q.Query()
 }
 
+// Where adds a where clause to end of the query
 func (q *QuerySet) Where(column string, op string, value any) *QuerySet {
 	q.Filters = q.Filters.Add(column, op, value)
 	return q
 }
 
+// From sets the table to query from
 func (q *QuerySet) From(table ...string) *QuerySet {
 	if len(table) > 0 {
 		q.Add(fmt.Sprintf(`FROM %s`, table[0]))
@@ -103,21 +118,25 @@ func (q *QuerySet) From(table ...string) *QuerySet {
 	return q
 }
 
+// OrderBy sets the order of the query
 func (q *QuerySet) OrderBy(column string, order string) *QuerySet {
 	q.Add(fmt.Sprintf(`ORDER BY %s %s`, column, order))
 	return q
 }
 
+// Limit the number of results returned
 func (q *QuerySet) Limit(limit int) *QuerySet {
 	q.LIMIT = limit
 	return q
 }
 
+// Offset the results returned
 func (q *QuerySet) Offset(offset int) *QuerySet {
 	q.OFFSET = offset
 	return q
 }
 
+// Join a table to the query
 func (q *QuerySet) Join(table string, column string, value any, op string) *QuerySet {
 	q.Add(fmt.Sprintf(`JOIN %s ON %s %s %s`, table, column, op, value))
 	return q
@@ -133,28 +152,25 @@ func (q *QuerySet) Get(values ...int) *QuerySet {
 	return q
 }
 
-func (q *QuerySet) GetFrom(from, where, op string, value any) *QuerySet {
-	q = q.Clear().All().From(from)
-	q.Where(where, op, value)
-	q.Limit(1)
-	return q
-}
-
+// Execute the query and return the results
 func (q *QuerySet) Exec() (*sql.Rows, error) {
 	query, vals := q.Query()
 	return q.db.Query(query, vals...)
 }
 
+// Execute the query and return the results
 func (q *QuerySet) ExecRow() (*sql.Row, error) {
 	query, vals := q.Query()
 	return q.db.QueryRow(query, vals...), nil
 }
 
+// Execute the query and return the results
 func (q *QuerySet) ExecOne() (*sql.Row, error) {
 	q.Limit(1)
 	return q.ExecRow()
 }
 
+// Execute the query and return the results as a ModelSet
 func (q *QuerySet) MultiModel(model ...Model) ModelSet {
 	if len(model) > 0 {
 		q.Model = model[0]
@@ -172,6 +188,7 @@ func (q *QuerySet) MultiModel(model ...Model) ModelSet {
 	return ms
 }
 
+// Execute the query and return the results as a Model
 func (q *QuerySet) SingleModel(model ...Model) (Model, error) {
 	if len(model) > 0 {
 		q.Model = model[0]
@@ -187,12 +204,14 @@ func (q *QuerySet) SingleModel(model ...Model) (Model, error) {
 	return ScanRow(row, newmodel)
 }
 
+// Paginate the results
 func (q *QuerySet) Page(page int) ModelSet {
 	q.setup()
 	q.Offset((page - 1) * q.PAGESIZE)
 	return q.MultiModel()
 }
 
+// Setup a basic query, added so you don't have to type .All().From() every time.
 func (q *QuerySet) setup() {
 	if len(q.Statements) < 2 && q.Model != nil {
 		q.Clear().All()

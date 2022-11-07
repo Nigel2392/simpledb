@@ -6,10 +6,13 @@ import (
 	"strconv"
 )
 
+// Filter returns a QuerySet with the given filters applied.
 func (d *Database) Filter(model Model, filter Filters) ModelSet {
 	return d.FilterWithLimit(model, filter, d.LIMIT)
 }
 
+// See Filter.
+// Also allows you to specify a limit on the number of results returned.
 func (d *Database) FilterWithLimit(model Model, filters Filters, limit int) ModelSet {
 	var query string = `SELECT * FROM ` + model.TableName()
 	f_query, values := filters.Query(false)
@@ -27,6 +30,7 @@ func (d *Database) FilterWithLimit(model Model, filters Filters, limit int) Mode
 	return ScanRows(results, model)
 }
 
+// AllQ returns a query that will return all rows in the table.
 func (d *Database) AllQ(model Model, exclude []string) string {
 	cols := Columns(model)
 	cols = Exclude(cols, exclude)
@@ -43,6 +47,7 @@ func (d *Database) AllQ(model Model, exclude []string) string {
 	return query
 }
 
+// Insert a model into the database.
 // Takes a pointer to a model and a sql.Row and scans the ID of result into the model
 func (d *Database) InsertModel(model Model) error {
 	columns := Columns(model)
@@ -58,6 +63,7 @@ func (d *Database) InsertModel(model Model) error {
 	return nil
 }
 
+// All models from a table
 func (d *Database) AllModel(model Model, exclude []string) ModelSet {
 	query := d.AllQ(model, exclude)
 	rows, err := d.Query(query)
@@ -69,6 +75,7 @@ func (d *Database) AllModel(model Model, exclude []string) ModelSet {
 	return ms
 }
 
+// Scan rows into models, put those into a ModelSet
 func ScanRows(rows *sql.Rows, model Model) ModelSet {
 	var models []Model
 	for rows.Next() {
@@ -81,6 +88,7 @@ func ScanRows(rows *sql.Rows, model Model) ModelSet {
 	return models
 }
 
+// Scan a row into a model
 func ScanRow(row *sql.Row, model Model) (Model, error) {
 	model = NewModel(model)
 	fields, err := modelFields(model)
