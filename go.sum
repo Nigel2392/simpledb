@@ -1,0 +1,8 @@
+github.com/Nigel2392/simplelog v1.0.0 h1:23RwFZ8Ga+5nK2J3HRrw/xZZCJgtpRdIva3PKBslTJ4=
+github.com/Nigel2392/simplelog v1.0.0/go.mod h1:HkuidHaKHbAY3xpup1IcoCovQFc0ECV6ebFDp8ZXcDg=
+github.com/Nigel2392/typeutils v1.0.2 h1:6F0MQMLe+9q/qGRp6k8R1mj8oD+Rdr+XYX5nMxGhAX4=
+github.com/Nigel2392/typeutils v1.0.2/go.mod h1:9Y8rV5c8ZfD2N9y+mtF9Kmy3OtDubcuevYeCQCLq/Sw=
+github.com/go-sql-driver/mysql v1.6.0 h1:BCTh4TKNUYmOmMUcQ3IipzF5prigylS7XXjEkfCHuOE=
+github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
+github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=
+github.com/joho/godotenv v1.4.0/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=

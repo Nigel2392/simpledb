@@ -1,0 +1,173 @@
+{
+    "Database": {
+        "Host": "localhost",
+        "Port": 3306,
+        "Username": "testing_http",
+        "Database": "testing_http",
+        "SSL_MODE": "disable",
+        "LIMIT": 1000
+    },
+    "Tables": [
+        {
+            "Name": "model_one",
+            "Columns": [
+                {
+                    "Table": "model_one",
+                    "Name": "id",
+                    "Default": "",
+                    "Type": "BIGINT",
+                    "Raw": "NOT NULL PRIMARY KEY AUTO_INCREMENT",
+                    "Length": 0,
+                    "Nullable": false,
+                    "Unique": false,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "RAW": "NOT NULL PRIMARY KEY AUTO_INCREMENT"
+                    }
+                },
+                {
+                    "Table": "model_one",
+                    "Name": "name",
+                    "Default": "",
+                    "Type": "VARCHAR",
+                    "Raw": "",
+                    "Length": 255,
+                    "Nullable": false,
+                    "Unique": false,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "LENGTH": "255"
+                    }
+                }
+            ],
+            "Relations": [
+                {
+                    "From": "model_one",
+                    "To": "model_two",
+                    "Type": "FK"
+                }
+            ]
+        },
+        {
+            "Name": "model_two",
+            "Columns": [
+                {
+                    "Table": "model_two",
+                    "Name": "id",
+                    "Default": "",
+                    "Type": "BIGINT",
+                    "Raw": "NOT NULL PRIMARY KEY AUTO_INCREMENT",
+                    "Length": 0,
+                    "Nullable": false,
+                    "Unique": false,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "RAW": "NOT NULL PRIMARY KEY AUTO_INCREMENT"
+                    }
+                },
+                {
+                    "Table": "model_two",
+                    "Name": "name",
+                    "Default": "",
+                    "Type": "VARCHAR",
+                    "Raw": "",
+                    "Length": 255,
+                    "Nullable": false,
+                    "Unique": false,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "LENGTH": "255"
+                    }
+                }
+            ],
+            "Relations": []
+        },
+        {
+            "Name": "model_three",
+            "Columns": [
+                {
+                    "Table": "model_three",
+                    "Name": "id",
+                    "Default": "",
+                    "Type": "BIGINT",
+                    "Raw": "NOT NULL PRIMARY KEY AUTO_INCREMENT",
+                    "Length": 0,
+                    "Nullable": false,
+                    "Unique": false,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "RAW": "NOT NULL PRIMARY KEY AUTO_INCREMENT"
+                    }
+                },
+                {
+                    "Table": "model_three",
+                    "Name": "name",
+                    "Default": "",
+                    "Type": "VARCHAR",
+                    "Raw": "",
+                    "Length": 255,
+                    "Nullable": false,
+                    "Unique": true,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "LENGTH": "255",
+                        "UNIQUE": "true"
+                    }
+                }
+            ],
+            "Relations": []
+        },
+        {
+            "Name": "test_model",
+            "Columns": [
+                {
+                    "Table": "test_model",
+                    "Name": "id",
+                    "Default": "",
+                    "Type": "BIGINT",
+                    "Raw": "NOT NULL PRIMARY KEY AUTO_INCREMENT",
+                    "Length": 0,
+                    "Nullable": false,
+                    "Unique": false,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "RAW": "NOT NULL PRIMARY KEY AUTO_INCREMENT"
+                    }
+                },
+                {
+                    "Table": "test_model",
+                    "Name": "name",
+                    "Default": "",
+                    "Type": "VARCHAR",
+                    "Raw": "",
+                    "Length": 255,
+                    "Nullable": false,
+                    "Unique": false,
+                    "Primary": false,
+                    "Index": false,
+                    "Auto": false,
+                    "Tags": {
+                        "LENGTH": "255"
+                    }
+                }
+            ],
+            "Relations": []
+        }
+    ],
+    "Models": null,
+    "Directory": "./migrations/"
+}
