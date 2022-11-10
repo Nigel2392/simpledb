@@ -74,7 +74,9 @@ func (d *Database) UpdateModel(model Model) (Model, error) {
 	if err != nil {
 		return nil, err
 	}
+	// Set the ID of the model to the ID of the updated model
 	SetValue(model, "id", id)
+	// Return the updated model
 	return model, nil
 }
 
