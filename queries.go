@@ -218,9 +218,12 @@ func (d *Database) ExecInsert(table string, columns []string, values []interface
 }
 
 // Execute updating a row.
-func (d *Database) ExecUpdate(table string, columns []string, values []interface{}, where string) error {
-	_, err := d.Exec(d.UpdateQuery(table, columns, where), values...)
-	return err
+func (d *Database) ExecUpdate(table string, columns []string, values []interface{}, where string, conditional any) (int64, error) {
+	res, err := d.Exec(d.UpdateQuery(table, columns, where), append(values, conditional)...)
+	if err != nil {
+		return 0, err
+	}
+	return res.LastInsertId()
 }
 
 // Execute deleting a row.

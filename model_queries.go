@@ -63,6 +63,22 @@ func (d *Database) InsertModel(model Model) error {
 	return nil
 }
 
+// Update a model in the database.
+// Takes a pointer to a model and a sql.Row and scans the ID of result into the model
+func (d *Database) UpdateModel(model Model) error {
+	columns := Columns(model)
+	values := make([]interface{}, len(columns))
+	for i, column := range columns {
+		values[i] = GetValue(model, column)
+	}
+	id, err := d.ExecUpdate(model.TableName(), columns, values, "id = ?", GetValue(model, "id"))
+	if err != nil {
+		return err
+	}
+	SetValue(model, "id", id)
+	return nil
+}
+
 // All models from a table
 func (d *Database) AllModel(model Model, exclude []string) ModelSet {
 	query := d.AllQ(model, exclude)
