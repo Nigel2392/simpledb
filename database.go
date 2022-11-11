@@ -98,7 +98,11 @@ type Model interface {
 	TableName() string
 }
 
-func CheckError(err error, number int) bool {
+func (db *Database) CheckError(err error, number int) bool {
+	return CheckSQLError(err, number)
+}
+
+func CheckSQLError(err error, number int) bool {
 	var mysqlErr *mysql.MySQLError
 	if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
 		return true
