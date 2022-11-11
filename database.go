@@ -2,9 +2,11 @@ package simpledb
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Nigel2392/simplelog"
+	"github.com/go-sql-driver/mysql"
 )
 
 // ENVIRONMENT VARIABLES:
@@ -94,4 +96,12 @@ func (db *Database) NewQS(mdl Model) *QuerySet {
 // Model interface
 type Model interface {
 	TableName() string
+}
+
+func CheckError(err error, number int) bool {
+	var mysqlErr *mysql.MySQLError
+	if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
+		return true
+	}
+	return false
 }
