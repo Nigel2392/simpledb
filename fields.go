@@ -78,7 +78,8 @@ func GetColTypes(types []string, dialect string) []string {
 	return types
 }
 
-// Get the model columns
+// Get the model columns, excluding related fields.
+// Optionally, you can specify a list of columns to exclude.
 func Columns(model any, exclude ...string) []string {
 	// Validate kind
 	kind := modelKind(model)
