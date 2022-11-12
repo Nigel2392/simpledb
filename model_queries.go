@@ -118,3 +118,8 @@ func ScanRow(row *sql.Row, model Model, exclude []string) (Model, error) {
 	}
 	return model, err
 }
+
+func (d *Database) DeleteModel(model Model) error {
+	_, err := d.Exec("DELETE FROM "+model.TableName()+" WHERE id = ?", GetValue(model, "id"))
+	return err
+}
