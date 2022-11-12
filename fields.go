@@ -79,13 +79,16 @@ func GetColTypes(types []string, dialect string) []string {
 }
 
 // Get the model columns
-func Columns(model any) []string {
+func Columns(model any, exclude ...string) []string {
 	// Validate kind
 	kind := modelKind(model)
 	// Loop through all fields in the struct
 	columns := []string{}
 	inlineLoopFields(kind, func(f reflect.StructField, i int) {
 		if isRelated(f) {
+			return
+		}
+		if typeutils.Contains(exclude, strings.ToLower(f.Name)) {
 			return
 		}
 		// Get the name of the struct field
