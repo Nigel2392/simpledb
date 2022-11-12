@@ -106,9 +106,9 @@ func ScanRows(rows *sql.Rows, model Model, exclude []string) ModelSet {
 }
 
 // Scan a row into a model
-func ScanRow(row *sql.Row, model Model, exclude []string) (Model, error) {
+func ScanRow(row *sql.Row, model Model, include []string) (Model, error) {
 	model = NewModel(model)
-	fields, err := modelFields(model, exclude)
+	fields, err := modelFields(model, include)
 	if err != nil {
 		return nil, errors.New("modelFields: " + err.Error())
 	}

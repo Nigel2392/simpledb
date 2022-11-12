@@ -5,8 +5,6 @@ import (
 	"errors"
 	"reflect"
 	"strings"
-
-	"github.com/Nigel2392/typeutils"
 )
 
 // Get the column types for a specified golang type
@@ -214,9 +212,9 @@ func isRelated(f reflect.StructField) bool {
 }
 
 // Scan a row into a model
-func Scan(model Model, row *sql.Rows, exclude []string) error {
+func Scan(model Model, row *sql.Rows, include []string) error {
 	// Validate kind
-	fields, err := modelFields(model, exclude)
+	fields, err := modelFields(model, include)
 	if err != nil {
 		return err
 	}
@@ -224,7 +222,7 @@ func Scan(model Model, row *sql.Rows, exclude []string) error {
 }
 
 // Get the model fields to scan into
-func modelFields(model Model, exclude []string) ([]any, error) {
+func modelFields(model Model, include []string) ([]any, error) {
 	// Use reflection to get the columns from the model
 	typeof := reflect.TypeOf(model)
 	struct_fields := make([]any, 0)
@@ -236,8 +234,10 @@ func modelFields(model Model, exclude []string) ([]any, error) {
 		if !TagValid(typeof.Field(i)) {
 			continue
 		}
-		if typeutils.Contains(exclude, strings.ToLower(typeof.Field(i).Name)) {
-			continue
+		for _, col := range include {
+			if strings.EqualFold(col, typeof.Field(i).Name) {
+				struct_fields = append(struct_fields, reflect.ValueOf(model).Elem().Field(i).Addr().Interface())
+			}
 		}
 		// Use a pointer to the field so that we can scan into it
 		struct_fields = append(struct_fields, reflect.ValueOf(model).Elem().Field(i).Addr().Interface())
