@@ -7,13 +7,13 @@ import (
 )
 
 // Filter returns a QuerySet with the given filters applied.
-func (d *Database) Filter(model Model, filter Filters, exclude []string) ModelSet {
-	return d.FilterWithLimit(model, filter, d.LIMIT, exclude)
+func (d *Database) Filter(model Model, filter Filters, include []string) ModelSet {
+	return d.FilterWithLimit(model, filter, d.LIMIT, include)
 }
 
 // See Filter.
 // Also allows you to specify a limit on the number of results returned.
-func (d *Database) FilterWithLimit(model Model, filters Filters, limit int, exclude []string) ModelSet {
+func (d *Database) FilterWithLimit(model Model, filters Filters, limit int, include []string) ModelSet {
 	var query string = `SELECT * FROM ` + model.TableName()
 	f_query, values := filters.Query(false)
 	if f_query == "" {
@@ -27,7 +27,7 @@ func (d *Database) FilterWithLimit(model Model, filters Filters, limit int, excl
 		panic(err)
 		// return nil
 	}
-	return ScanRows(results, model, exclude)
+	return ScanRows(results, model, include)
 }
 
 // AllQ returns a query that will return all rows in the table.
@@ -81,23 +81,23 @@ func (d *Database) UpdateModel(model Model) (Model, error) {
 }
 
 // All models from a table
-func (d *Database) AllModel(model Model, exclude []string) ModelSet {
-	query := d.AllQ(model, exclude)
+func (d *Database) AllModel(model Model, include []string) ModelSet {
+	query := d.AllQ(model, include)
 	rows, err := d.Query(query)
 	if err != nil {
 		return nil
 	}
-	ms := ScanRows(rows, model, exclude)
+	ms := ScanRows(rows, model, include)
 	rows.Close()
 	return ms
 }
 
 // Scan rows into models, put those into a ModelSet
-func ScanRows(rows *sql.Rows, model Model, exclude []string) ModelSet {
+func ScanRows(rows *sql.Rows, model Model, include []string) ModelSet {
 	var models []Model
 	for rows.Next() {
 		model := NewModel(model)
-		if err := Scan(model, rows, exclude); err != nil {
+		if err := Scan(model, rows, include); err != nil {
 			panic(err)
 		}
 		models = append(models, model)

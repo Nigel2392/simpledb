@@ -12,7 +12,7 @@ import (
 // Queryset is a struct that handles generating SQL queries
 type QuerySet struct {
 	Statements []string
-	include    []string
+	exclude    []string
 	Filters    Filters
 	Q          string
 	db         *Database
@@ -86,8 +86,8 @@ func (q *QuerySet) Count() *QuerySet {
 // Select specific columns from the table
 func (q *QuerySet) Select(columns ...string) *QuerySet {
 	for _, column := range columns {
-		if !typeutils.Contains(q.include, column) {
-			q.include = append(q.include, column)
+		if !typeutils.Contains(q.exclude, column) {
+			q.exclude = append(q.exclude, column)
 		}
 	}
 	q.Add(fmt.Sprintf(`SELECT %s`, strings.Join(columns, ", ")))
@@ -191,7 +191,7 @@ func (q *QuerySet) MultiModel(model ...Model) ModelSet {
 		panic(err)
 	}
 	defer rows.Close()
-	ms := ScanRows(rows, q.Model, q.include)
+	ms := ScanRows(rows, q.Model, q.exclude)
 	rows.Close()
 	return ms
 }
@@ -209,7 +209,7 @@ func (q *QuerySet) SingleModel(model ...Model) (Model, error) {
 		return nil, errors.New("no results found: " + err.Error())
 	}
 	newmodel := NewModel(q.Model)
-	return ScanRow(row, newmodel, q.include)
+	return ScanRow(row, newmodel, q.exclude)
 }
 
 // Paginate the results
