@@ -98,10 +98,12 @@ type Model interface {
 	TableName() string
 }
 
+// Check for SQL errors
 func (db *Database) CheckError(err error, number int) bool {
 	return CheckSQLError(err, number)
 }
 
+// Check for SQL errors
 func CheckSQLError(err error, number int) bool {
 	var mysqlErr *mysql.MySQLError
 	if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
@@ -110,6 +112,7 @@ func CheckSQLError(err error, number int) bool {
 	return false
 }
 
+// Return all the models registered with the database
 func (db *Database) AllModels() []Model {
 	return db.models
 }
