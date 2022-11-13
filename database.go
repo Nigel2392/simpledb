@@ -106,7 +106,7 @@ func (db *Database) CheckError(err error, number int) bool {
 // Check for SQL errors
 func CheckSQLError(err error, number int) bool {
 	var mysqlErr *mysql.MySQLError
-	if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
+	if errors.As(err, &mysqlErr) && mysqlErr.Number == uint16(number) {
 		return true
 	}
 	return false
