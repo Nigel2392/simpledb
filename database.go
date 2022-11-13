@@ -109,3 +109,7 @@ func CheckSQLError(err error, number int) bool {
 	}
 	return false
 }
+
+func (db *Database) AllModels() []Model {
+	return db.models
+}
