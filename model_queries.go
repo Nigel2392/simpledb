@@ -116,6 +116,7 @@ func ScanRow(row *sql.Row, model Model, include []string) (Model, error) {
 	if err != nil {
 		err = errors.New("no results found: " + err.Error())
 	}
+
 	return model, err
 }
 

@@ -313,11 +313,11 @@ func (m Migration) Run() error {
 				if err != nil {
 					return errors.New("error creating relation table for " + r.From + " and " + r.To + ": " + err.Error())
 				}
-			case "otm", "onetomany":
-				err := m.Database.AlterOneToMany(r.From, r.To)
-				if err != nil {
-					return errors.New("error creating relation table for " + r.From + " and " + r.To + ": " + err.Error())
-				}
+				//case "otm", "onetomany":
+				//	err := m.Database.AlterOneToMany(r.From, r.To)
+				//	if err != nil {
+				//		return errors.New("error creating relation table for " + r.From + " and " + r.To + ": " + err.Error())
+				//	}
 			}
 			migrations++
 		}
@@ -372,11 +372,11 @@ func (m Migration) Run() error {
 				if err != nil {
 					return errors.New("error dropping relation table for " + r.From + " and " + r.To + ": " + err.Error())
 				}
-			case "otm", "onetomany":
-				err := m.Database.AlterDropOneToMany(r.From, r.To)
-				if err != nil {
-					return errors.New("error dropping relation table for " + r.From + " and " + r.To + ": " + err.Error())
-				}
+				//case "otm", "onetomany":
+				//	err := m.Database.AlterDropOneToMany(r.From, r.To)
+				//	if err != nil {
+				//		return errors.New("error dropping relation table for " + r.From + " and " + r.To + ": " + err.Error())
+				//	}
 			}
 			migrations++
 		}

@@ -88,7 +88,13 @@
                     }
                 }
             ],
-            "Relations": []
+            "Relations": [
+                {
+                    "From": "model_two",
+                    "To": "model_three",
+                    "Type": "ONETOONE"
+                }
+            ]
         },
         {
             "Name": "model_three",
@@ -117,13 +123,12 @@
                     "Raw": "",
                     "Length": 255,
                     "Nullable": false,
-                    "Unique": true,
+                    "Unique": false,
                     "Primary": false,
                     "Index": false,
                     "Auto": false,
                     "Tags": {
-                        "LENGTH": "255",
-                        "UNIQUE": "true"
+                        "LENGTH": "255"
                     }
                 }
             ],
