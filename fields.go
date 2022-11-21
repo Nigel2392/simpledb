@@ -98,6 +98,23 @@ func Columns(model any, exclude ...string) []string {
 	return columns
 }
 
+// Get all of the model columns, including related fields.
+// Optionally, you can specify a list of columns to exclude.
+func AllColumns(model any, exclude ...string) []string {
+	// Validate kind
+	kind := modelKind(model)
+	// Loop through all fields in the struct
+	columns := []string{}
+	inlineLoopFields(kind, func(f reflect.StructField, i int) {
+		if typeutils.Contains(exclude, strings.ToLower(f.Name)) {
+			return
+		}
+		// Get the name of the struct field
+		columns = append(columns, strings.ToLower(f.Name))
+	})
+	return columns
+}
+
 // Get the columns needed for a migration
 func MigrationColumns(model Model) []Column {
 	kind := modelKind(model)
