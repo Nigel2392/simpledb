@@ -189,12 +189,12 @@ func GetValue(model Model, column string) any {
 		if strings.EqualFold(f_kind.Name, column) {
 			var val any
 			// var err error
-			if isRelated(f_kind) {
-				// TODO: Handle related fields
-				// Query the related table
-				// Get the value of the related fields
-				continue
-			}
+			//if isRelated(f_kind) {
+			//	// TODO: Handle related fields
+			//	// Query the related table
+			//	// Get the value of the related fields
+			//	continue
+			//}
 			if f_kind.Type.Kind() == reflect.Ptr {
 				val = reflect.ValueOf(model).Elem().Field(i).Elem().Interface()
 			} else {
